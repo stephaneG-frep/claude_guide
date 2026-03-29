@@ -27,7 +27,7 @@ class _ApiScreenState extends State<ApiScreen> with SingleTickerProviderStateMix
   Widget build(BuildContext context) {
     return ValueListenableBuilder<AppTheme>(
       valueListenable: themeNotifier,
-      builder: (context, _, __) => Column(
+      builder: (context, _, child) => Column(
         children: [
           Container(
             color: context.isOrange ? const Color(0xFF2A1A0C) : const Color(0xFF1B2E1B),
@@ -62,7 +62,7 @@ class _PythonExamples extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _SectionLabel('Appel simple', context),
+          sectionLabel('Appel simple', context),
           const SizedBox(height: 8),
           CodeBlock(code:'''import anthropic
 
@@ -80,7 +80,7 @@ message = client.messages.create(
 
 print(message.content[0].text)'''),
           const SizedBox(height: 20),
-          _SectionLabel('Avec contexte système', context),
+          sectionLabel('Avec contexte système', context),
           const SizedBox(height: 8),
           CodeBlock(code:'''message = client.messages.create(
     model="claude-sonnet-4-6",
@@ -91,7 +91,7 @@ print(message.content[0].text)'''),
     ]
 )'''),
           const SizedBox(height: 20),
-          _SectionLabel('Streaming', context),
+          sectionLabel('Streaming', context),
           const SizedBox(height: 8),
           CodeBlock(code:'''with client.messages.stream(
     model="claude-sonnet-4-6",
@@ -101,7 +101,7 @@ print(message.content[0].text)'''),
     for text in stream.text_stream:
         print(text, end="", flush=True)'''),
           const SizedBox(height: 20),
-          _SectionLabel('Vision (image)', context),
+          sectionLabel('Vision (image)', context),
           const SizedBox(height: 8),
           CodeBlock(code:'''import base64
 
@@ -144,7 +144,7 @@ class _JsExamples extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _SectionLabel('Appel simple', context),
+          sectionLabel('Appel simple', context),
           const SizedBox(height: 8),
           CodeBlock(code:'''import Anthropic from "@anthropic-ai/sdk";
 
@@ -162,7 +162,7 @@ const message = await client.messages.create({
 
 console.log(message.content[0].text);'''),
           const SizedBox(height: 20),
-          _SectionLabel('Streaming', context),
+          sectionLabel('Streaming', context),
           const SizedBox(height: 8),
           CodeBlock(code:'''const stream = client.messages.stream({
   model: "claude-sonnet-4-6",
@@ -176,7 +176,7 @@ for await (const event of stream) {
   }
 }'''),
           const SizedBox(height: 20),
-          _SectionLabel('Avec outils (tools)', context),
+          sectionLabel('Avec outils (tools)', context),
           const SizedBox(height: 8),
           CodeBlock(code:'''const response = await client.messages.create({
   model: "claude-sonnet-4-6",
@@ -212,7 +212,7 @@ class _DartExamples extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _SectionLabel('Appel HTTP direct', context),
+          sectionLabel('Appel HTTP direct', context),
           const SizedBox(height: 8),
           CodeBlock(code:'''import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -238,7 +238,7 @@ Future<String> askClaude(String question) async {
   return data['content'][0]['text'];
 }'''),
           const SizedBox(height: 20),
-          _SectionLabel('Intégration Flutter Widget', context),
+          sectionLabel('Intégration Flutter Widget', context),
           const SizedBox(height: 8),
           CodeBlock(code:'''class ChatWidget extends StatefulWidget {
   const ChatWidget({super.key});
@@ -281,7 +281,7 @@ class _ChatWidgetState extends State<ChatWidget> {
 }
 
 // ─── Widgets partagés ────────────────────────────────────────────────────────
-Widget _SectionLabel(String text, BuildContext context) => Text(
+Widget sectionLabel(String text, BuildContext context) => Text(
       text,
       style: TextStyle(color: context.accentLight, fontSize: 14, fontWeight: FontWeight.w600),
     );

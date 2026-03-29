@@ -6,6 +6,7 @@ import 'screens/api_screen.dart';
 import 'screens/prompts_screen.dart';
 import 'screens/features_screen.dart';
 import 'screens/chat_screen.dart';
+import 'screens/playground_screen.dart';
 
 // ─── Définition des deux thèmes ──────────────────────────────────────────────
 class AppThemes {
@@ -58,7 +59,7 @@ class ThemeConfig {
   final Color indicator;
   final Color footerText;
   final List<Color> headerGradient;
-  final List<_NavItem> navItems;
+  final List<NavItem> navItems;
 
   const ThemeConfig({
     required this.primary,
@@ -82,12 +83,13 @@ class ThemeConfig {
     footerText: Color(0xFF546E7A),
     headerGradient: [Color(0xFF1B5E20), Color(0xFF2E7D32), Color(0xFF388E3C)],
     navItems: [
-      _NavItem(icon: Icons.home_outlined,         label: 'Accueil',         color: Color(0xFF43A047)),
-      _NavItem(icon: Icons.download_outlined,     label: 'Installation',    color: Color(0xFF388E3C)),
-      _NavItem(icon: Icons.code_outlined,         label: 'API & Code',      color: Color(0xFF2E7D32)),
-      _NavItem(icon: Icons.auto_awesome_outlined, label: 'Prompts',         color: Color(0xFF558B2F)),
-      _NavItem(icon: Icons.star_outline,          label: 'Fonctionnalités', color: Color(0xFF33691E)),
-      _NavItem(icon: Icons.chat_bubble_outline,   label: 'Chat Claude',     color: Color(0xFF43A047)),
+      NavItem(icon: Icons.home_outlined,         label: 'Accueil',         color: Color(0xFF43A047)),
+      NavItem(icon: Icons.download_outlined,     label: 'Installation',    color: Color(0xFF388E3C)),
+      NavItem(icon: Icons.code_outlined,         label: 'API & Code',      color: Color(0xFF2E7D32)),
+      NavItem(icon: Icons.auto_awesome_outlined, label: 'Prompts',         color: Color(0xFF558B2F)),
+      NavItem(icon: Icons.star_outline,          label: 'Fonctionnalités', color: Color(0xFF33691E)),
+      NavItem(icon: Icons.chat_bubble_outline,   label: 'Chat Claude',     color: Color(0xFF43A047)),
+      NavItem(icon: Icons.science_outlined,      label: 'Playground',      color: Color(0xFF66BB6A)),
     ],
   );
 
@@ -101,12 +103,13 @@ class ThemeConfig {
     footerText: Color(0xFF8D6E63),
     headerGradient: [Color(0xFF7C2D00), Color(0xFFBF5A1A), Color(0xFFE07530)],
     navItems: [
-      _NavItem(icon: Icons.home_outlined,         label: 'Accueil',         color: Color(0xFFE07530)),
-      _NavItem(icon: Icons.download_outlined,     label: 'Installation',    color: Color(0xFFD4622E)),
-      _NavItem(icon: Icons.code_outlined,         label: 'API & Code',      color: Color(0xFFBF5A1A)),
-      _NavItem(icon: Icons.auto_awesome_outlined, label: 'Prompts',         color: Color(0xFFE8850A)),
-      _NavItem(icon: Icons.star_outline,          label: 'Fonctionnalités', color: Color(0xFFA0440E)),
-      _NavItem(icon: Icons.chat_bubble_outline,   label: 'Chat Claude',     color: Color(0xFFE07530)),
+      NavItem(icon: Icons.home_outlined,         label: 'Accueil',         color: Color(0xFFE07530)),
+      NavItem(icon: Icons.download_outlined,     label: 'Installation',    color: Color(0xFFD4622E)),
+      NavItem(icon: Icons.code_outlined,         label: 'API & Code',      color: Color(0xFFBF5A1A)),
+      NavItem(icon: Icons.auto_awesome_outlined, label: 'Prompts',         color: Color(0xFFE8850A)),
+      NavItem(icon: Icons.star_outline,          label: 'Fonctionnalités', color: Color(0xFFA0440E)),
+      NavItem(icon: Icons.chat_bubble_outline,   label: 'Chat Claude',     color: Color(0xFFE07530)),
+      NavItem(icon: Icons.science_outlined,      label: 'Playground',      color: Color(0xFFF4A261)),
     ],
   );
 }
@@ -153,7 +156,26 @@ class _MainScaffoldState extends State<MainScaffold> {
     PromptsScreen(),
     FeaturesScreen(),
     ChatScreen(),
+    PlaygroundScreen(),
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    claudeNavIndex.addListener(_onNavChange);
+  }
+
+  @override
+  void dispose() {
+    claudeNavIndex.removeListener(_onNavChange);
+    super.dispose();
+  }
+
+  void _onNavChange() {
+    if (claudeNavIndex.value != _selectedIndex) {
+      setState(() => _selectedIndex = claudeNavIndex.value);
+    }
+  }
 
   ThemeConfig get _cfg =>
       themeNotifier.value == AppTheme.green ? ThemeConfig.green : ThemeConfig.orange;
@@ -162,8 +184,9 @@ class _MainScaffoldState extends State<MainScaffold> {
   Widget build(BuildContext context) {
     return ValueListenableBuilder<AppTheme>(
       valueListenable: themeNotifier,
-      builder: (context, _, __) => Scaffold(
+      builder: (context, _, child) => Scaffold(
         appBar: AppBar(
+          iconTheme: const IconThemeData(color: Colors.white),
           title: Row(
             children: [
               Container(
@@ -201,7 +224,6 @@ class _MainScaffoldState extends State<MainScaffold> {
           // Header gradient
           Container(
             width: double.infinity,
-            padding: const EdgeInsets.fromLTRB(20, 52, 20, 24),
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topLeft,
@@ -209,7 +231,11 @@ class _MainScaffoldState extends State<MainScaffold> {
                 colors: cfg.headerGradient,
               ),
             ),
-            child: Column(
+            child: SafeArea(
+              bottom: false,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),
+                child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
@@ -241,6 +267,8 @@ class _MainScaffoldState extends State<MainScaffold> {
                   ),
                 ),
               ],
+                ),
+              ),
             ),
           ),
 
@@ -325,7 +353,7 @@ class _MainScaffoldState extends State<MainScaffold> {
                     themeNotifier.value =
                         val ? AppTheme.orange : AppTheme.green;
                   },
-                  activeColor: const Color(0xFFF4A261),
+                  activeThumbColor: const Color(0xFFF4A261),
                   activeTrackColor: const Color(0xFFBF5A1A),
                   inactiveThumbColor: const Color(0xFF66BB6A),
                   inactiveTrackColor: const Color(0xFF2E7D32),
@@ -335,13 +363,16 @@ class _MainScaffoldState extends State<MainScaffold> {
           ),
 
           // Footer
-          Padding(
-            padding: const EdgeInsets.only(bottom: 14),
-            child: Text(
-              'v1.0 • Claude Anthropic Guide',
-              style: TextStyle(
-                color: cfg.footerText.withValues(alpha: 0.6),
-                fontSize: 11,
+          SafeArea(
+            top: false,
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 14),
+              child: Text(
+                'v2.0 • Claude Anthropic Guide',
+                style: TextStyle(
+                  color: cfg.footerText.withValues(alpha: 0.6),
+                  fontSize: 11,
+                ),
               ),
             ),
           ),
@@ -351,9 +382,9 @@ class _MainScaffoldState extends State<MainScaffold> {
   }
 }
 
-class _NavItem {
+class NavItem {
   final IconData icon;
   final String label;
   final Color color;
-  const _NavItem({required this.icon, required this.label, required this.color});
+  const NavItem({required this.icon, required this.label, required this.color});
 }

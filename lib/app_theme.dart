@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 final themeNotifier = ValueNotifier<AppTheme>(AppTheme.green);
+final claudeNavIndex = ValueNotifier<int>(0);
+final pendingPromptNotifier = ValueNotifier<String?>(null);
 
 enum AppTheme { green, orange }
 

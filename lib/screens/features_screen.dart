@@ -35,7 +35,7 @@ class FeaturesScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return ValueListenableBuilder<AppTheme>(
       valueListenable: themeNotifier,
-      builder: (context, _, __) => ListView.builder(
+      builder: (context, _, child) => ListView.builder(
         padding: const EdgeInsets.all(12),
         itemCount: _features.length,
         itemBuilder: (context, index) {

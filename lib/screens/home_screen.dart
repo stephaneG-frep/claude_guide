@@ -9,7 +9,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return ValueListenableBuilder<AppTheme>(
       valueListenable: themeNotifier,
-      builder: (context, _, __) => _buildContent(context),
+      builder: (context, _, child) => _buildContent(context),
     );
   }
 
