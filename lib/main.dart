@@ -7,6 +7,7 @@ import 'screens/prompts_screen.dart';
 import 'screens/features_screen.dart';
 import 'screens/chat_screen.dart';
 import 'screens/playground_screen.dart';
+import 'screens/splash_screen.dart';
 
 // ─── Définition des deux thèmes ──────────────────────────────────────────────
 class AppThemes {
@@ -131,7 +132,7 @@ class ClaudeGuideApp extends StatelessWidget {
           title: 'Claude Guide',
           debugShowCheckedModeBanner: false,
           theme: theme == AppTheme.green ? AppThemes.green : AppThemes.orange,
-          home: const MainScaffold(),
+          home: const SplashScreen(),
         );
       },
     );

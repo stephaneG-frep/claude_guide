@@ -163,6 +163,10 @@ class _PlaygroundScreenState extends State<PlaygroundScreen> {
       controller: _scrollController,
       padding: const EdgeInsets.all(16),
       children: [
+        // Card d'introduction
+        const _InfoCard(),
+        const SizedBox(height: 20),
+
         // Modèle
         _label('Modèle', context),
         Wrap(
@@ -439,6 +443,85 @@ class _PlaygroundScreenState extends State<PlaygroundScreen> {
       child: Text('$label: $value',
           style: TextStyle(
               color: color, fontSize: 10, fontFamily: 'monospace')),
+    );
+  }
+}
+
+class _InfoCard extends StatelessWidget {
+  const _InfoCard();
+
+  @override
+  Widget build(BuildContext context) {
+    final items = [
+      (Icons.tune, 'Ajustez les paramètres',
+          'Temperature contrôle la créativité (0 = déterministe, 1 = très créatif). Top P filtre le vocabulaire utilisé. Max Tokens limite la longueur de la réponse.'),
+      (Icons.model_training, 'Choisissez le bon modèle',
+          'claude-sonnet-4-6 pour le meilleur équilibre performance/vitesse, claude-opus-4-6 pour les tâches les plus complexes, claude-haiku-4-5 pour la rapidité maximale.'),
+      (Icons.bolt, 'Pourquoi ce playground ?',
+          'Testez en direct l\'impact de chaque paramètre sur les réponses de l\'API Claude, sans écrire de code. Idéal pour calibrer vos prompts avant intégration.'),
+    ];
+
+    return Container(
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: context.tipBg,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: context.tipBorder),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Container(
+                width: 32,
+                height: 32,
+                decoration: BoxDecoration(
+                  color: context.accentLight.withValues(alpha: 0.15),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Icon(Icons.science_outlined,
+                    color: context.accentLight, size: 18),
+              ),
+              const SizedBox(width: 10),
+              Text('Comment utiliser le Playground',
+                  style: TextStyle(
+                      color: context.accentLight,
+                      fontWeight: FontWeight.w700,
+                      fontSize: 14)),
+            ],
+          ),
+          const SizedBox(height: 12),
+          ...items.map((item) => Padding(
+                padding: const EdgeInsets.only(bottom: 10),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Icon(item.$1, color: context.accentMid, size: 16),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(item.$2,
+                              style: TextStyle(
+                                  color: Theme.of(context).colorScheme.onSurface,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 12)),
+                          const SizedBox(height: 2),
+                          Text(item.$3,
+                              style: TextStyle(
+                                  color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.65),
+                                  fontSize: 11,
+                                  height: 1.4)),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              )),
+        ],
+      ),
     );
   }
 }
