@@ -30,6 +30,8 @@ extension AppThemeExt on BuildContext {
   Color get accentMid   => isOrange ? const Color(0xFFE07530) : const Color(0xFF43A047);
 
   // Gradient hero
+  Color get onSurface => isOrange ? const Color(0xFFF0E0CC) : const Color(0xFFE8F5E9);
+
   List<Color> get heroGradient => isOrange
       ? [const Color(0xFF7C2D00), const Color(0xFFBF5A1A), const Color(0xFFE07530)]
       : [const Color(0xFF1B5E20), const Color(0xFF2E7D32), const Color(0xFF388E3C)];

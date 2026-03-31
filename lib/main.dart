@@ -7,6 +7,10 @@ import 'screens/prompts_screen.dart';
 import 'screens/features_screen.dart';
 import 'screens/chat_screen.dart';
 import 'screens/playground_screen.dart';
+import 'screens/claude_code_screen.dart';
+import 'screens/apps_screen.dart';
+import 'screens/quiz_screen.dart';
+import 'screens/ai_agents_screen.dart';
 import 'screens/splash_screen.dart';
 
 // ─── Définition des deux thèmes ──────────────────────────────────────────────
@@ -91,6 +95,10 @@ class ThemeConfig {
       NavItem(icon: Icons.star_outline,          label: 'Fonctionnalités', color: Color(0xFF33691E)),
       NavItem(icon: Icons.chat_bubble_outline,   label: 'Chat Claude',     color: Color(0xFF43A047)),
       NavItem(icon: Icons.science_outlined,      label: 'Playground',      color: Color(0xFF66BB6A)),
+      NavItem(icon: Icons.terminal_outlined,     label: 'Claude Code & MCP', color: Color(0xFF388E3C)),
+      NavItem(icon: Icons.apps_outlined,         label: 'Applications',    color: Color(0xFF2E7D32)),
+      NavItem(icon: Icons.quiz_outlined,         label: 'Quiz',            color: Color(0xFF558B2F)),
+      NavItem(icon: Icons.hub_outlined,           label: 'IA & Agents',     color: Color(0xFF43A047)),
     ],
   );
 
@@ -111,6 +119,10 @@ class ThemeConfig {
       NavItem(icon: Icons.star_outline,          label: 'Fonctionnalités', color: Color(0xFFA0440E)),
       NavItem(icon: Icons.chat_bubble_outline,   label: 'Chat Claude',     color: Color(0xFFE07530)),
       NavItem(icon: Icons.science_outlined,      label: 'Playground',      color: Color(0xFFF4A261)),
+      NavItem(icon: Icons.terminal_outlined,     label: 'Claude Code & MCP', color: Color(0xFFD4622E)),
+      NavItem(icon: Icons.apps_outlined,         label: 'Applications',    color: Color(0xFFBF5A1A)),
+      NavItem(icon: Icons.quiz_outlined,         label: 'Quiz',            color: Color(0xFFE8850A)),
+      NavItem(icon: Icons.hub_outlined,           label: 'IA & Agents',     color: Color(0xFFE07530)),
     ],
   );
 }
@@ -127,7 +139,7 @@ class ClaudeGuideApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return ValueListenableBuilder<AppTheme>(
       valueListenable: themeNotifier,
-      builder: (context, theme, _) {
+      builder: (context, theme, child) {
         return MaterialApp(
           title: 'Claude Guide',
           debugShowCheckedModeBanner: false,
@@ -158,6 +170,10 @@ class _MainScaffoldState extends State<MainScaffold> {
     FeaturesScreen(),
     ChatScreen(),
     PlaygroundScreen(),
+    ClaudeCodeScreen(),
+    AppsScreen(),
+    QuizScreen(),
+    AiAgentsScreen(),
   ];
 
   @override
@@ -185,7 +201,7 @@ class _MainScaffoldState extends State<MainScaffold> {
   Widget build(BuildContext context) {
     return ValueListenableBuilder<AppTheme>(
       valueListenable: themeNotifier,
-      builder: (context, _, child) => Scaffold(
+      builder: (context, theme, child) => Scaffold(
         appBar: AppBar(
           iconTheme: const IconThemeData(color: Colors.white),
           title: Row(
@@ -239,15 +255,14 @@ class _MainScaffoldState extends State<MainScaffold> {
                 child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
-                  width: 62,
-                  height: 62,
-                  decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.15),
-                    shape: BoxShape.circle,
-                    border: Border.all(color: Colors.white30, width: 2),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(16),
+                  child: Image.asset(
+                    'assets/images/mon_logo.jpeg',
+                    width: 110,
+                    height: 170,
+                    fit: BoxFit.cover,
                   ),
-                  child: const Icon(Icons.psychology, size: 38, color: Colors.white),
                 ),
                 const SizedBox(height: 14),
                 const Text(
